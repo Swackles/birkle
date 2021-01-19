@@ -6,6 +6,14 @@ const client = new Pool()
 
 const router = express.Router();
 
+router.get('/:id([0-9]+)', async (req: Request, res: Response) => {
+  const { id } = req.params
+
+  const { rows } = await client.query('SELECT id, user_id AS "userID", description, start_time AS "startTime", end_time AS "endTime" FROM time_logs WHERE id=$1', [id])
+
+  res.send(rows[0])
+})
+
 router.post('/', async (req: Request, res: Response) => {
   const { description, startTime, endTime } = req.body;
   if (!(new Date(startTime).getTime() > 0 && new Date(endTime).getTime() > 0)) return res.status(400).send(ErrorJSON(ErrorTypes.TIMESTAMP_INCORRECT))
