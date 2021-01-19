@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { ErrorTypes, main as ErrorJSON } from './../util/errorResponse';
 import { Pool } from 'pg'
 
@@ -12,7 +12,7 @@ router.get('/', async (req: Request, res: Response) => {
   res.send(rows)
 })
 
-router.get('/:id([0-9]+)', async (req: Request, res: Response) => {
+router.get('/:id([0-9]+)', checkTimeLogExists, async (req: Request, res: Response) => {
   const { id } = req.params
 
   const { rows } = await client.query('SELECT id, user_id AS "userID", description, start_time AS "startTime", end_time AS "endTime" FROM time_logs WHERE id=$1', [id])
@@ -20,7 +20,7 @@ router.get('/:id([0-9]+)', async (req: Request, res: Response) => {
   res.send(rows[0])
 })
 
-router.delete('/:id([0-9]+)', async (req: Request, res: Response) => {
+router.delete('/:id([0-9]+)', checkTimeLogExists, async (req: Request, res: Response) => {
   const { id } = req.params
 
   await client.query('DELETE FROM time_logs WHERE id=$1 AND user_id=$2', [id, res.locals.user.id])
@@ -59,6 +59,14 @@ async function checkOverlaps(startTime: Date, endTime: Date | undefined): Promis
 
     return rows.length != 0
   }
+}
+
+async function checkTimeLogExists(req: Request, res: Response, next: NextFunction) {
+  const { rows } = await client.query('SELECT * FROM time_logs WHERE id=$1 AND user_id=$2', [req.params.id, res.locals.user.id])
+
+  if (rows.length == 0) return res.status(400).send(ErrorJSON(ErrorTypes.TIMELOG_ID_MISSING))
+  
+  next()
 }
 
 export default router;
