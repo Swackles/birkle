@@ -37,9 +37,9 @@ router.put('/:id([0-9]+)', checkTimeLogOngoing, async (req: Request, res: Respon
   if (!(new Date(startTime).getTime() > 0 && new Date(endTime).getTime() > 0)) return res.status(400).send(ErrorJSON(ErrorTypes.TIMESTAMP_INCORRECT))
 
   const queryParams = [id, res.locals.user.id, description, startTime, endTime]
-  const { rows } = await client.query('UPDATE time_logs SET description=$3, start_time=$4, end_time=$5 WHERE id=$1, user_id=$2', queryParams)
+  const { rows } = await client.query('UPDATE time_logs SET description=$3, start_time=$4, end_time=$5 WHERE id=$1 AND user_id=$2', queryParams)
 
-  res.send(rows)
+  res.send()
 })
 
 router.post('/:id([0-9]+)', checkTimeLogEnded, async (req: Request, res: Response) => {
