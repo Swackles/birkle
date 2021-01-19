@@ -20,6 +20,14 @@ router.get('/:id([0-9]+)', async (req: Request, res: Response) => {
   res.send(rows[0])
 })
 
+router.delete('/:id([0-9]+)', async (req: Request, res: Response) => {
+  const { id } = req.params
+
+  await client.query('DELETE FROM time_logs WHERE id=$1 AND user_id=$2', [id, res.locals.user.id])
+
+  res.send()
+})
+
 router.post('/', async (req: Request, res: Response) => {
   const { description, startTime, endTime } = req.body;
   if (!(new Date(startTime).getTime() > 0 && new Date(endTime).getTime() > 0)) return res.status(400).send(ErrorJSON(ErrorTypes.TIMESTAMP_INCORRECT))
