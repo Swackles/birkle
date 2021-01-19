@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
-import { auth as authPath } from './routes/'
+import { authPath, timeLogPath } from './routes/'
 import authentication from './util/authetnication'
 import bodyParser from 'body-parser';
 
@@ -16,6 +16,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/auth', authPath);
+app.use('/timelog', authentication, timeLogPath);
 
 // catch 404 and forward to error handler
 app.use((req: Request, res: Response) => { res.status(404).send() });

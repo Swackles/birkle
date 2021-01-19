@@ -5,7 +5,8 @@ enum ErrorTypes {
   MANDATORY_FIELD_MISSING = 'MANDATORY_FIELD_MISSING',
   USER_EXISTS = 'USER_EXISTS',
   AUTH_INVALID_EMAIL = 'INVALID_EMAIL',
-  INVALID_EMAIL_PASSWORD ='INVALID_EMAIL_PASSWORD'
+  INVALID_EMAIL_PASSWORD = 'INVALID_EMAIL_PASSWORD',
+  TIMESTAMP_INCORRECT = 'TIMESTAMP_INCORRECT'
 }
 
 const errors = {
@@ -15,7 +16,8 @@ const errors = {
   'MANDATORY_FIELD_MISSING': 'The mandatory field is missing or malformed',
   'USER_EXISTS': 'User already exists',
   'INVALID_EMAIL': 'Email address is invalid',
-  'INVALID_EMAIL_PASSWORD': 'Email or password is incorrect'
+  'INVALID_EMAIL_PASSWORD': 'Email or password is incorrect',
+  'TIMESTAMP_INCORRECT': 'Timestamp is in incorrect'
 }
 
 function main (error: ErrorTypes): { code: string, msg: string } {

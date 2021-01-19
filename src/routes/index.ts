@@ -1,5 +1,7 @@
-import auth from './auth'
+import authPath from './auth'
+import timeLogPath from './timeLog'
 
 export {
-  auth
+  authPath,
+  timeLogPath
 }
