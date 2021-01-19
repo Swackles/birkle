@@ -6,6 +6,12 @@ const client = new Pool()
 
 const router = express.Router();
 
+router.get('/', async (req: Request, res: Response) => {
+  const { rows } = await client.query('SELECT id, user_id AS "userID", description, start_time AS "startTime", end_time AS "endTime" FROM time_logs WHERE user_id=$1', [res.locals.user.id])
+
+  res.send(rows)
+})
+
 router.get('/:id([0-9]+)', async (req: Request, res: Response) => {
   const { id } = req.params
 
