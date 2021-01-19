@@ -10,9 +10,6 @@ RUN npm run build
 
 RUN cd dist/migrations
 
-RUN rm dist/migrations/*.js.map
-
-
 FROM node:14-alpine
 RUN apk add nodejs bash --no-cache
 WORKDIR /birkle
