@@ -4,8 +4,8 @@ enum ErrorTypes {
   TIMELOG_OVERLAP = 'TIMELOG_OVERLAP',
   MANDATORY_FIELD_MISSING = 'MANDATORY_FIELD_MISSING',
   USER_EXISTS = 'USER_EXISTS',
-  AUTH_INVALID_EMAIL = 'INVALID_EMAIL'
-
+  AUTH_INVALID_EMAIL = 'INVALID_EMAIL',
+  INVALID_EMAIL_PASSWORD ='INVALID_EMAIL_PASSWORD'
 }
 
 const errors = {
@@ -14,7 +14,8 @@ const errors = {
   'TIMELOG_OVERLAP': 'There\'s an already existing time range that overlaps',
   'MANDATORY_FIELD_MISSING': 'The mandatory field is missing or malformed',
   'USER_EXISTS': 'User already exists',
-  'INVALID_EMAIL': 'Email address is invalid'
+  'INVALID_EMAIL': 'Email address is invalid',
+  'INVALID_EMAIL_PASSWORD': 'Email or password is incorrect'
 }
 
 function main (error: ErrorTypes): { code: string, msg: string } {
