@@ -1,6 +1,7 @@
 enum ErrorTypes {
   TIMELOG_ID_MISSING = 'TIMELOG_ID_MISSING',
   TIMELOG_ONGOING = 'TIMELOG_ONGOING',
+  TIMELOG_ENDED = 'TIMELOG_ENDED',
   TIMELOG_OVERLAP = 'TIMELOG_OVERLAP',
   MANDATORY_FIELD_MISSING = 'MANDATORY_FIELD_MISSING',
   USER_EXISTS = 'USER_EXISTS',
@@ -17,7 +18,8 @@ const errors = {
   'USER_EXISTS': 'User already exists',
   'INVALID_EMAIL': 'Email address is invalid',
   'INVALID_EMAIL_PASSWORD': 'Email or password is incorrect',
-  'TIMESTAMP_INCORRECT': 'Timestamp is in incorrect'
+  'TIMESTAMP_INCORRECT': 'Timestamp is in incorrect',
+  'TIMELOG_ENDED': 'Timelog has already ended'
 }
 
 function main (error: ErrorTypes): { code: string, msg: string } {
