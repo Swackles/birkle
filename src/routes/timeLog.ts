@@ -42,6 +42,16 @@ router.put('/:id([0-9]+)', checkTimeLogOngoing, async (req: Request, res: Respon
   res.send(rows)
 })
 
+router.post('/:id([0-9]+)', checkTimeLogEnded, async (req: Request, res: Response) => {
+  const { endTime } = req.body;
+
+  if (endTime == undefined || !(new Date(endTime).getTime() > 0)) return res.status(400).send(ErrorJSON(ErrorTypes.MANDATORY_FIELD_MISSING))
+
+  await client.query('UPDATE time_logs SET end_time=$1', [endTime])
+
+  res.send()
+})
+
 router.post('/', async (req: Request, res: Response) => {
   const { description, startTime, endTime } = req.body;
 
@@ -53,7 +63,7 @@ router.post('/', async (req: Request, res: Response) => {
   await client.connect();
 
   const queryParams = [res.locals.user.id, description, startTime, endTime]
-  const result = await client.query('INSERT INTO public.time_logs(user_id, description, start_time, end_time) VALUES($1, $2, $3, $4);', queryParams)
+  const result = await client.query('INSERT INTO time_logs(user_id, description, start_time, end_time) VALUES($1, $2, $3, $4)', queryParams)
 
   res.send()
 })
@@ -89,7 +99,15 @@ async function checkTimeLogExists(req: Request, res: Response, next: NextFunctio
 async function checkTimeLogOngoing(req: Request, res: Response, next: NextFunction) {
   const { rows } = await client.query('SELECT * FROM time_logs WHERE id=$1 AND user_id=$2 AND end_time IS NOT NULL', [req.params.id, res.locals.user.id])
 
-  if (rows.length == 0) return res.status(400).send(ErrorJSON(ErrorTypes.TIMELOG_ID_MISSING))
+  if (rows.length == 0) return res.status(400).send(ErrorJSON(ErrorTypes.TIMELOG_ONGOING))
+
+  next()
+}
+
+async function checkTimeLogEnded(req: Request, res: Response, next: NextFunction) {
+  const { rows } = await client.query('SELECT * FROM time_logs WHERE id=$1 AND user_id=$2 AND end_time IS NULL', [req.params.id, res.locals.user.id])
+
+  if (rows.length == 0) return res.status(400).send(ErrorJSON(ErrorTypes.TIMELOG_ENDED))
 
   next()
 }
